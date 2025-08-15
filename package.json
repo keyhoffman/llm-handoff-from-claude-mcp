@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "tsc && node dist/server.js"
+    "dev": "tsc && node dist/server.js",
+    "install-global": "npm run build && npm install -g ."
   },
   "keywords": ["mcp", "llm", "chatgpt", "perplexity", "gemini"],
   "author": "",

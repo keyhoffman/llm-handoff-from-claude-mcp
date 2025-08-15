@@ -8,7 +8,11 @@ import {
 import dotenv from 'dotenv'
 import { ChatGPTProvider, PerplexityProvider, GeminiProvider, LLMProvider } from './llm-providers.js'
 
-dotenv.config()
+// Suppress dotenv output for MCP
+const originalConsoleLog = console.log
+console.log = () => {}
+dotenv.config({ path: '/Users/keyhoffman/Desktop/04-Software/llm-handoff-mcp/.env' })
+console.log = originalConsoleLog
 
 // Initialize providers
 const providers: LLMProvider[] = []
@@ -17,11 +21,11 @@ if (process.env.OPENAI_API_KEY) {
   providers.push(new ChatGPTProvider(process.env.OPENAI_API_KEY))
 }
 
-if (process.env.PERPLEXITY_API_KEY) {
+if (process.env.PERPLEXITY_API_KEY && process.env.PERPLEXITY_API_KEY !== 'your_perplexity_api_key_here') {
   providers.push(new PerplexityProvider(process.env.PERPLEXITY_API_KEY))
 }
 
-if (process.env.GEMINI_API_KEY) {
+if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here') {
   providers.push(new GeminiProvider(process.env.GEMINI_API_KEY))
 }
 
@@ -149,7 +153,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function runServer() {
   const transport = new StdioServerTransport()
   await server.connect(transport)
-  console.error('LLM Handoff MCP Server running on stdio')
+  // Don't log to stderr in MCP mode - it can interfere with some clients
 }
 
 runServer().catch(console.error)
