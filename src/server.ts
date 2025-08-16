@@ -134,7 +134,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     )
     
     const responses = results.map(result => 
-      result.status === 'fulfilled' ? result.value : `Error: ${result.reason}`
+      result.status === 'fulfilled' ? result.value : `**Error:**\n${result.reason}`
     )
     
     return {
